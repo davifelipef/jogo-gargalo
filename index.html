@@ -68,6 +68,69 @@
         </div>
     </footer>
 
+    <div id="admin-modal" class="modal hidden">
+        <div class="modal-content">
+            <button id="close-admin-modal" class="modal-close" type="button" aria-label="Fechar">
+                ×
+            </button>
+
+            <h2 id="admin-modal-title">Acesso administrativo</h2>
+
+            <div id="login-form">
+                <p>Digite a senha para acessar as configurações.</p>
+
+                <label for="admin-password">Senha</label>
+                <input
+                    id="admin-password"
+                    type="password"
+                    autocomplete="current-password"
+                >
+
+                <p id="login-error" class="form-error hidden">
+                    Senha incorreta.
+                </p>
+
+                <button id="admin-login" type="button">
+                    Entrar
+                </button>
+            </div>
+
+            <div id="settings-form" class="hidden">
+                <div class="setting-field">
+                    <label for="round-input">Rodada</label>
+                    <input id="round-input" type="number" min="1" step="1">
+                </div>
+
+                <div class="setting-field">
+                    <label for="wip-input">WIP</label>
+
+                    <div class="wip-input">
+                        <input id="wip-input" type="number" min="1" step="1">
+                        <label>
+                            <input id="unlimited-wip" type="checkbox">
+                            Ilimitado
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-preview">
+                    <span>Processamento</span>
+                    <strong id="settings-processing-time">4s</strong>
+                </div>
+
+                <div class="settings-actions">
+                    <button id="save-settings" type="button">
+                        Salvar
+                    </button>
+
+                    <button id="admin-logout" type="button">
+                        Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="js/app.js"></script>
 </body>
 </html>
