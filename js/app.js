@@ -30,6 +30,12 @@ const processingTimeElement = document.querySelector("#processing-time");
 const completedTasksElement = document.querySelector("#completed-tasks");
 const completedTasksCount = completedTasksElement.querySelector("strong");
 
+const groupTaskCounts = {
+    1: document.querySelector("#group-1-count"),
+    2: document.querySelector("#group-2-count"),
+    3: document.querySelector("#group-3-count")
+};
+
 const settingsButton = document.querySelector("#settings");
 
 const adminModal = document.querySelector("#admin-modal");
@@ -116,6 +122,31 @@ function updateCompletedCounter(tasks) {
         "has-completed",
         completedCount > 0
     );
+}
+
+function updateGroupTaskCounts(tasks) {
+    const counts = {
+        1: 0,
+        2: 0,
+        3: 0
+    };
+
+    Object.values(tasks).forEach((task) => {
+        if (counts[task.group] !== undefined) {
+            counts[task.group]++;
+        }
+    });
+
+    Object.entries(counts).forEach(([group, count]) => {
+        groupTaskCounts[group].textContent = count;
+    });
+
+    Object.entries(counts).forEach(([group, count]) => {
+        const element = groupTaskCounts[group];
+
+        element.textContent = count;
+        element.classList.toggle("zero", count === 0);
+    });
 }
 
 function getProcessingTaskCount() {
@@ -496,6 +527,7 @@ onValue(tasksRef, (snapshot) => {
 
     renderTasks(currentTasks);
     updateCompletedCounter(currentTasks);
+    updateGroupTaskCounts(currentTasks);
 });
 
 onValue(configRef, (snapshot) => {

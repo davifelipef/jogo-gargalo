@@ -351,10 +351,29 @@ button:hover:not(:disabled) {
     flex: 1;
 }
 
+.task-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    margin-left: 6px;
+    padding: 0 7px;
+    border-radius: 14px;
+    background: #222;
+    color: #fff !important;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.task-count.zero {
+    color: #22c55e !important;
+}
+
 @media (max-width: 800px) {
     html,
     body {
-        overflow: auto;
+        overflow: hidden;
     }
 
     .header {
@@ -368,10 +387,12 @@ button:hover:not(:disabled) {
 
     .board {
         grid-template-columns: 1fr;
-        overflow: visible;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .column {
         min-height: 400px;
+        flex-shrink: 0;
     }
 }
