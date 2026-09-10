@@ -4,10 +4,12 @@ import {
     push,
     onValue,
     update,
-    set
+    set,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 const tasksRef = ref(database, "tasks");
+const serverTimeOffsetRef = ref(database, ".info/serverTimeOffset");
 
 const createTaskButton = document.querySelector("#create-task");
 const resetGameButton = document.querySelector("#reset-game");
@@ -22,6 +24,16 @@ const groupTasks = {
 const timerIntervals = new Map();
 
 const PROCESSING_TIME = 4000;
+
+let serverTimeOffset = 0;
+
+onValue(serverTimeOffsetRef, (snapshot) => {
+    serverTimeOffset = snapshot.val() || 0;
+});
+
+function getServerTime() {
+    return Date.now() + serverTimeOffset;
+}
 
 function clearTimerIntervals() {
     timerIntervals.forEach((interval) => {
@@ -49,7 +61,7 @@ function setupTimer(id, task, card) {
     function updateTimer() {
         const remaining = Math.max(
             0,
-            task.startedAt + task.duration - Date.now()
+            task.startedAt + task.duration - getServerTime()
         );
 
         const remainingSeconds = Math.ceil(remaining / 1000);
@@ -76,7 +88,7 @@ function setupTimer(id, task, card) {
 
     updateTimer();
 
-    if (Date.now() < task.startedAt + task.duration) {
+    if (getServerTime() < task.startedAt + task.duration) {
         const interval = setInterval(updateTimer, 100);
 
         timerIntervals.set(id, interval);
@@ -137,7 +149,7 @@ function renderTasks(tasks) {
             card.addEventListener("click", async () => {
                 await update(ref(database, `tasks/${id}`), {
                     group: 4,
-                    completedAt: Date.now()
+                    completedAt: serverTimestamp()
                 });
             });
         }
@@ -168,7 +180,7 @@ groupTasks[2].addEventListener("drop", async (event) => {
 
     await update(ref(database, `tasks/${taskId}`), {
         group: 2,
-        startedAt: Date.now(),
+        startedAt: serverTimestamp(),
         duration: PROCESSING_TIME
     });
 });
@@ -237,6 +249,6 @@ createTaskButton.addEventListener("click", async () => {
     await push(tasksRef, {
         number: nextNumber,
         group: 1,
-        createdAt: Date.now()
+        createdAt: serverTimestamp()
     });
 });
