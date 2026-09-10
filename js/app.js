@@ -14,6 +14,7 @@ const serverTimeOffsetRef = ref(database, ".info/serverTimeOffset");
 const createTaskButton = document.querySelector("#create-task");
 const resetGameButton = document.querySelector("#reset-game");
 const completedTasksElement = document.querySelector("#completed-tasks");
+const completedTasksCount = completedTasksElement.querySelector("strong");
 
 const groupTasks = {
     1: document.querySelector("#group-1-tasks"),
@@ -48,7 +49,12 @@ function updateCompletedCounter(tasks) {
         .filter((task) => task.group === 4)
         .length;
 
-    completedTasksElement.textContent = `Concluídas: ${completedCount}`;
+    completedTasksCount.textContent = completedCount;
+
+    completedTasksElement.classList.toggle(
+        "has-completed",
+        completedCount > 0
+    );
 }
 
 function setupTimer(id, task, card) {
